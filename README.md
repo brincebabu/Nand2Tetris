@@ -30,17 +30,18 @@ The Nand2Tetris course is a hands-on journey into computer science fundamentals.
 - **Key Components**: 
   - AND, OR, NOT gates
   - Multiplexers
-  - Half Adder and Full Adder
 
 ### 2. Boolean Arithmetic
 - **Description**: Construction of arithmetic circuits, including a full adder and the ALU (Arithmetic Logic Unit).
 - **Key Components**:
+  - Half Adder and Full Adder
   - Incrementer
   - ALU (Arithmetic Logic Unit)
 
 ### 3. Sequential Logic
 - **Description**: Design of sequential circuits like flip-flops, registers, and RAM.
 - **Key Components**:
+  - Program Counter 
   - D Flip-Flop
   - 16-bit Register
   - RAM (Random Access Memory)
@@ -51,6 +52,8 @@ The Nand2Tetris course is a hands-on journey into computer science fundamentals.
   - Add.asm
   - Max.asm
   - Rect.asm
+  - Fill.asm
+  - Mult.asm
 
 ### 5. Computer Architecture
 - **Description**: Building the Hack computer by integrating the ALU, registers, and memory.
