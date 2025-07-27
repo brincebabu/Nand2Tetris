@@ -1,0 +1,62 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computag Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/1/And16.hdl
+/**
+ * 16-bit And gate:
+ * for i = 0, ..., 15:
+ * out[i] = a[i] And b[i] 
+ */
+CHIP And16 {
+    IN a[16], b[16];
+    OUT out[16];
+
+    PARTS:
+    Nand(a=a[0] , b=b[0] , out=outTemp0 );
+    Nand(a=outTemp0 , b=outTemp0 , out=out[0] );
+
+    Nand(a=a[1] , b=b[1] , out=outTemp1 );
+    Nand(a=outTemp1 , b=outTemp1 , out=out[1] );
+
+    Nand(a=a[2] , b=b[2] , out=outTemp2 );
+    Nand(a=outTemp2 , b=outTemp2 , out=out[2] );
+
+    Nand(a=a[3] , b=b[3] , out=outTemp3 );
+    Nand(a=outTemp3 , b=outTemp3 , out=out[3] );
+
+    Nand(a=a[4] , b=b[4] , out=outTemp4 );
+    Nand(a=outTemp4 , b=outTemp4 , out=out[4] );
+
+    Nand(a=a[5] , b=b[5] , out=outTemp5 );
+    Nand(a=outTemp5 , b=outTemp5 , out=out[5] );
+
+    Nand(a=a[6] , b=b[6] , out=outTemp6 );
+    Nand(a=outTemp6 , b=outTemp6 , out=out[6] );
+
+    Nand(a=a[7] , b=b[7] , out=outTemp7 );
+    Nand(a=outTemp7 , b=outTemp7 , out=out[7] );
+
+    Nand(a=a[8] , b=b[8] , out=outTemp8 );
+    Nand(a=outTemp8 , b=outTemp8 , out=out[8] );
+
+    Nand(a=a[9] , b=b[9] , out=outTemp9 );
+    Nand(a=outTemp9 , b=outTemp9 , out=out[9] );
+
+    Nand(a=a[10] , b=b[10] , out=outTemp10 );
+    Nand(a=outTemp10 , b=outTemp10 , out=out[10] );
+
+    Nand(a=a[11] , b=b[11] , out=outTemp11 );
+    Nand(a=outTemp11 , b=outTemp11 , out=out[11] );
+
+    Nand(a=a[12] , b=b[12] , out=outTemp12 );
+    Nand(a=outTemp12 , b=outTemp12 , out=out[12] );
+
+    Nand(a=a[13] , b=b[13] , out=outTemp13 );
+    Nand(a=outTemp13 , b=outTemp13 , out=out[13] );
+
+    Nand(a=a[14] , b=b[14] , out=outTemp14 );
+    Nand(a=outTemp14 , b=outTemp14 , out=out[14] );
+
+    Nand(a=a[15] , b=b[15] , out=outTemp15 );
+    Nand(a=outTemp15 , b=outTemp15 , out=out[15] );
+}

@@ -1,0 +1,91 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/5/CPU.hdl
+/**
+ * The Hack Central Processing unit (CPU).
+ * Parses the binary code in the instruction input and executes it according to the
+ * Hack machine language specification. In the case of a C-instruction, computes the
+ * function specified by the instruction. If the instruction specifies to read a memory
+ * value, the inM input is expected to contain this value. If the instruction specifies
+ * to write a value to the memory, sets the outM output to this value, sets the addressM
+ * output to the target address, and asserts the writeM output (when writeM = 0, any
+ * value may appear in outM).
+ * If the reset input is 0, computes the address of the next instruction and sets the
+ * pc output to that value. If the reset input is 1, sets pc to 0.
+ * Note: The outM and writeM outputs are combinational: they are affected by the
+ * instruction's execution during the current cycle. The addressM and pc outputs are
+ * clocked: although they are affected by the instruction's execution, they commit to
+ * their new values only in the next cycle.
+ */
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+
+    ALU(x=DRegOut , y=MuxAMemOut , zx=instruction[11] , nx=instruction[10] , zy=instruction[9] , ny=instruction[8] , f=instruction[7] , no=instruction[6] , out=ALUOUt , zr=ZrOut , ng=NgOut, out=outM, out=ALUMemInput );
+
+    And(a=instruction[4] , b=instruction[15] , out=DRegCtrl );
+
+    DRegister(in=ALUOUt , load=DRegCtrl , out=DRegOut );
+    Mux16(a=ARegOut , b=inM , sel=instruction[12] , out=MuxAMemOut );
+
+    And(a=instruction[15] , b=instruction[5] , out=CInsCtrl );
+    Not(in=instruction[15] , out=AInsCtrl );
+    Xor(a=AInsCtrl , b=CInsCtrl , out=ARegLoad );
+
+    ARegister(in=MuxALUInsOut , load=ARegLoad , out=ARegOut, out[0..14]=addressM, out[0..14]=MemIpAddr );
+    Mux16(a=instruction , b=ALUOUt , sel=instruction[15] , out=MuxALUInsOut );
+
+    And(a=instruction[3] , b=instruction[15] , out=writeM );
+    //Program Counter
+    //Load Signals Logic
+
+    Not(in=ZrOut , out=ZrOutNot );
+    Not(in=NgOut , out=NgOutNot );
+
+    //NULL 
+    //false
+
+    //JGT  
+    Or(a=ZrOut , b=NgOut , out=IncLoadJGT );
+    Not(in=IncLoadJGT , out=LoadJGT );
+
+    //JEQ  
+    And(a=ZrOut , b=NgOutNot , out=LoadJEQ );
+
+    //JGE
+    Or(a=ZrOut , b=NgOutNot , out=LoadJGE );
+
+    //JLT
+    And(a=ZrOutNot , b=NgOut , out=LoadJLT );
+
+    //JNE
+    //ZrOutNot
+    And(a=ZrOutNot , b=instruction[15] , out=LoadJNE );
+
+    //JLE
+    Xor(a=ZrOut , b=NgOut , out=LoadJLE);
+
+    //JMP
+    //true
+
+    Mux(a=false , b=true , sel=instruction[15] , out=LoadUnCnd );
+
+    Mux8Way16(a=false , b[0]=LoadJGT , c[0]=LoadJEQ , d[0]=NgOutNot , e[0]=LoadJLT , f[0]=LoadJNE , g[0]=LoadJLE , h[0]=LoadUnCnd , sel=instruction[0..2] , out=loadPC16,out[0]=loadPC );
+
+    Not(in=loadPC , out=incPC );
+    
+    PC(in=ARegOut , load=loadPC , inc=incPC , reset=reset , out[0..14]=pc );
+
+}
